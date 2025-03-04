@@ -12,18 +12,24 @@ export default function EditStoryPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
+  const [originalTitle, setOriginalTitle] = useState("");
+  const [originalContent, setOriginalContent] = useState("");
 
   useEffect(() => {
     const fetchStory = async () => {
       try {
         const docRef = doc(db, "stories", id as string);
         const docSnap = await getDoc(docRef);
+
         if (docSnap.exists()) {
           const data = docSnap.data();
           setTitle(data.title);
           setContent(data.content);
+          setOriginalTitle(data.title);
+          setOriginalContent(data.content);
         } else {
-          console.error("Story not found!");
+          alert("Story not found!");
+          router.push("/");
         }
       } catch (error) {
         console.error("Error fetching story:", error);
@@ -33,9 +39,19 @@ export default function EditStoryPage() {
     };
 
     if (id) fetchStory();
-  }, [id]);
+  }, [id, router]);
 
   const handleUpdate = async () => {
+    if (!title.trim() || !content.trim()) {
+      alert("Title and content cannot be empty!");
+      return;
+    }
+
+    if (title === originalTitle && content === originalContent) {
+      alert("No changes detected.");
+      return;
+    }
+
     try {
       const docRef = doc(db, "stories", id as string);
       await updateDoc(docRef, {

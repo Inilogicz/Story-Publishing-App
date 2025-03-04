@@ -18,7 +18,7 @@ interface Story {
 export default function HomePage() {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { user } = useAuth(); // Get the logged-in user
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -63,7 +63,7 @@ export default function HomePage() {
           <h1 className="text-4xl font-bold text-[#006634] mb-6 text-center">
             Published Stories
           </h1>
-  
+
           <div className="flex justify-between items-center mb-6">
             <p className="text-gray-600">
               {loading
@@ -79,28 +79,34 @@ export default function HomePage() {
               + Add Story
             </Link>
           </div>
-  
+
           {loading ? (
             <div className="text-center text-gray-500">Fetching stories...</div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {stories.map((story) => (
-                <div key={story.id} className="bg-white p-5 rounded-lg shadow-md">
-                  <h2 className="text-xl font-semibold">{story.title}</h2>
-                  <p className="text-gray-600 mt-2">{story.content.substring(0, 120)}...</p>
-                  <div className="mt-4 flex justify-between">
-                    <Link href={`/story/${story.id}`} className="text-blue-600">Read More</Link>
-                    {user?.uid === story.authorId && (
-                      <div className="flex gap-3">
-                        <Link href={`/edit-story/${story.id}`} className="text-yellow-500">Edit</Link>
-                        <button onClick={() => handleDelete(story.id)} className="text-red-500">
-                          Delete
-                        </button>
-                      </div>
-                    )}
+              {stories.map((story) => {
+                console.log(`Story ID: ${story.id} | Author: ${story.authorId} | Current User: ${user?.uid}`);
+                
+                return (
+                  <div key={story.id} className="bg-white p-5 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold text-black">{story.title}</h2>
+                    <p className="text-gray-600 mt-2">{story.content.substring(0, 120)}...</p>
+                    <div className="mt-4 flex justify-between">
+                      <Link href={`/story/${story.id}`} className="text-blue-600">Read More</Link>
+
+                      {/* Only show Edit/Delete if current user is the author */}
+                      {user?.uid === story.authorId && (
+                        <div className="flex gap-3">
+                          <Link href={`/edit-story/${story.id}`} className="text-yellow-500">Edit</Link>
+                          <button onClick={() => handleDelete(story.id)} className="text-red-500">
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

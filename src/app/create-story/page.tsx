@@ -33,8 +33,9 @@ export default function AddStory() {
       await addDoc(collection(db, "stories"), {
         title,
         content,
-        author: user.displayName || "Anonymous",
+        author: user.displayName || "Anonymous",    
         userId: user.uid,
+        authorId: user.uid,
         createdAt: serverTimestamp(),
       });
       router.push("/");
