@@ -23,13 +23,15 @@ export default function Login() {
 
   return (
     <>
-      <Navbar />
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      {/* <Navbar /> */}
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 text-black">
+        
         <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h2 className="text-2xl font-semibold mb-4">Login</h2>
+        <p className="text-2xl font-semibold mb-4 text-[#006634]">Welcome to Story App</p>
+          <h2 className="text-2xl font-semibold mb-4 text-[#006634]">Login</h2>
           <form onSubmit={handleLogin}>
             <div className="mb-4">
-              <label className="block text-gray-700">Email</label>
+              <label className="block text-black">Email</label>
               <input
                 type="email"
                 value={email}
@@ -55,6 +57,9 @@ export default function Login() {
               Login
             </button>
           </form>
+          <p className="mt-4 text-sm text-gray-700">
+            Don't have an account? <a href="/signup" className="text-red">Sign up</a>
+          </p>
         </div>
       </div>
     </>

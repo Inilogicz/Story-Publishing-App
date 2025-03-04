@@ -24,10 +24,11 @@ export default function Signup() {
 
   return (
     <>
-      <Navbar />
+      
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
+            <p className="text-2xl font-semibold mb-4 text-[#006634]">Welcome to Story App </p>
+          <h2 className="text-2xl font-semibold mb-4 text-[#006634] ">Sign Up</h2>
           <form onSubmit={handleSignup}>
             <div className="mb-4">
               <label className="block text-gray-700">Email</label>
@@ -56,6 +57,9 @@ export default function Signup() {
               Sign Up
             </button>
           </form>
+          <p className="mt-4 text-center text-gray-600">
+            Already have an account? <a href="/login">Login</a>
+          </p>
         </div>
       </div>
     </>

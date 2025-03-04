@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../lib/firebase-config";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../context/AuthContext"; // Import AuthContext to get the logged-in user
 
 export default function AddStory() {
   const [title, setTitle] = useState("");
@@ -11,6 +12,7 @@ export default function AddStory() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const { user } = useAuth(); // Get the logged-in user from context
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,12 +23,19 @@ export default function AddStory() {
       return;
     }
 
+    if (!user) {
+      setError("You must be logged in to add a story.");
+      return;
+    }
+
     setLoading(true);
     try {
       await addDoc(collection(db, "stories"), {
         title,
         content,
-        createdAt: new Date(),
+        author: user.displayName || "Anonymous",
+        userId: user.uid,
+        createdAt: serverTimestamp(),
       });
       router.push("/");
     } catch (err) {
